@@ -8,7 +8,7 @@ baseada no jogo Campo Minado.
 * dotenv
 * cors
 ## Integrantes
-* Evelyn
+* Evelyn Gregorio
 * Guilherme Hermes
 * Hian Oliveira
 ## Instalação
