@@ -24,26 +24,28 @@ class JogoService {
         return tabuleiro;
        }
 
-    //    FUNÇOES A SEREM IMPLEMENTADAS
-       async comecarJogo(dados){
-            if(dados.userId)         
+//     //    FUNÇOES A SEREM IMPLEMENTADAS
+//        async comecarJogo(dados){
+//             if(dados.userId)         
 
 
 
 
 
-           const tabuleiro = this.gerarTabuleiro();
-    }
+//            const tabuleiro = this.gerarTabuleiro();
+//     }
     
-       async sacar(){
+//        async sacar(){
 
-       }
+//        }
 
-       async revelarPosicao(){
+//        async revelarPosicao(){
 
-       }
+//        }
 
-       async calcularPremio(){
+//        async calcularPremio(){
 
-       }
+//        }
 }
+
+module.exports = new JogoService();
