@@ -1,4 +1,6 @@
-const db = require('../config/pg');
+//NOME DAS TABELAS COM LETRA MAIUSCULA (Jogo, Usuario)
+
+const pool = require('../config/pg');
 
 const criarUsuario = async (usuario) => {
     const query = `
@@ -15,12 +17,12 @@ const criarUsuario = async (usuario) => {
         usuario.saldo || 0
     ];
 
-    const result = await db.query(query, values);
+    const result = await pool.query(query, values);
     return result.rows[0];
 };
 
 const buscarEmail = async (email) => {
-    const result = await db.query(
+    const result = await pool.query(
         'SELECT * FROM usuarios WHERE email = $1',
         [email]
     );
@@ -29,7 +31,7 @@ const buscarEmail = async (email) => {
 };
 
 const buscarUsuarioPorId = async (id) => {
-    const result = await db.query(
+    const result = await pool.query(
         'SELECT id, nome, email, data_nascimento, saldo FROM usuarios WHERE id = $1',
         [id]
     );
@@ -39,7 +41,7 @@ const buscarUsuarioPorId = async (id) => {
 };
 
 const deletarUsuario = async (id) => {
-    const result = await db.query(
+    const result = await pool.query(
         'DELETE FROM usuarios WHERE id = $1 RETURNING *',
         [id]
     );
