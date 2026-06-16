@@ -1,51 +1,55 @@
 class JogoService {
-    gerarTabuleiro(){
+    gerarTabuleiro() {
         const tabuleiro = [];
-        const qtdDiamantes = Math.floor(Math.random()* 10) + 1;
-        for (let i = 0; i < 5; i++){
+        const qtdDiamantes = Math.floor(Math.random() * 10) + 1;
+        for (let i = 0; i < 5; i++) {
             tabuleiro[i] = [];
 
-            for(let j = 0; j < 5; j++){
+            for (let j = 0; j < 5; j++) {
                 tabuleiro[i][j] = "BOMBA";
             }
         }
 
-        for(let r = 0; r < qtdDiamantes; r++){
-            const linha = Math.floor(Math.random()*5);
-            const coluna = Math.floor(Math.random()*5);
+        for (let r = 0; r < qtdDiamantes; r++) {
+            const linha = Math.floor(Math.random() * 5);
+            const coluna = Math.floor(Math.random() * 5);
 
-            if (tabuleiro[linha][coluna] === "BOMBA"){
+            if (tabuleiro[linha][coluna] === "BOMBA") {
                 tabuleiro[linha][coluna] = "DIAMANTE";
-            }else{
+            } else {
                 r--;
             }
         }
 
         return tabuleiro;
-       }
-
-//     //    FUNÇOES A SEREM IMPLEMENTADAS
-//        async comecarJogo(dados){
-//             if(dados.userId)         
+    }
 
 
+    revelarPosicao(tabuleiro, linha, coluna) {
+        const posicao = tabuleiro[linha][coluna];
 
+        if (posicao === "BOMBA") {
+            return{
+                resultado: "BOMBA",
+                perdeu:true
+            };
+        return{
+            resultado: ""
+        }
+        }
+    //    FUNÇOES A SEREM IMPLEMENTADAS
+       
+       async sacar(){
 
+        }
 
-//            const tabuleiro = this.gerarTabuleiro();
-//     }
-    
-//        async sacar(){
+       async revelarPosicao(){
 
-//        }
+        }
 
-//        async revelarPosicao(){
+       async calcularPremio(){
 
-//        }
-
-//        async calcularPremio(){
-
-//        }
-}
+        }
+    }
 
 module.exports = new JogoService();
