@@ -1,17 +1,39 @@
 const express = require('express');
 const cors = require('cors');
 
+//TESTE DE CONEXAO
+const db = require('./config/pg.js');
+
 const app = express();
 
 //middlewares essenciais
 app.use(cors());
 app.use(express.json());
 
+
 //log simples das requisições
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.url}`);
     next();
 })
+
+// rotas
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const jogoRoutes = require('./routes/jogoRoutes');
+
+console.log(authRoutes);
+console.log(userRoutes);
+console.log(jogoRoutes);
+
+// Conectando rotas AUTH JOGO E USER
+app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
+app.use("/games", jogoRoutes);
+
+
+
+
 
 //Rota de teste
 app.get('/', (req, res) => {
@@ -36,6 +58,17 @@ app.use((err, req, res, next) => {
         erro: 'Erro interno do servidor'
     });
 });
+
+// TESTE DE CON
+db.query('SELECT NOW()')
+    .then(result => {
+        console.log('Banco conectado!');
+        console.log(result.rows[0]);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+
 
 const PORT = 3000;
 app.listen(PORT, () => {

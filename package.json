@@ -5,6 +5,8 @@
   "main": "src/app.js",
   "scripts": {
     "dev": "nodemon src/app.js",
+    "start": "node server.js",
+    "db:create": "PGPASSWORD=postgres psql -U postgres -h localhost -f schema.sql",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,6 +26,8 @@
   },
   "dependencies": {
     "cors": "^2.8.6",
-    "express": "^5.2.1"
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.21.0"
   }
 }
