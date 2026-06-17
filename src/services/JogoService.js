@@ -32,7 +32,7 @@ class JogoService {
 
     async revelarPosicao(jogoId, linha, coluna) {
 
-        const jogo =await JogoRepository.buscarJogoPorId(jogoId);
+        const jogo = await JogoRepository.buscarJogoPorId(jogoId);
 
         if (!jogo) {
             throw new Error("JOGO NÃO ENCONTRADO");
@@ -78,20 +78,20 @@ class JogoService {
 
         jogo.diamantes_encontrados++;
 
-        jogo.premio_atual =this.calcularPremio(jogo.valor_aposta, jogo.diamantes_encontrados);
+        jogo.premio_atual = this.calcularPremio(jogo.valor_aposta, jogo.diamantes_encontrados);
 
         jogo.posicoes_reveladas.push({
             linha,
             coluna
         });
 
-        await JogoRepository.atualizarJogo(jogo.id,jogo);
+        await JogoRepository.atualizarJogo(jogo.id, jogo);
 
         return {
             resultado: "DIAMANTE",
-            diamantes_encontrados:jogo.diamantes_encontrados,
-            premio_atual:jogo.premio_atual,
-            status:jogo.status_jogo
+            diamantes_encontrados: jogo.diamantes_encontrados,
+            premio_atual: jogo.premio_atual,
+            status: jogo.status_jogo
         };
     }
 
@@ -101,42 +101,57 @@ class JogoService {
 
     async sacar(jogoId) {
 
-    const jogo = await JogoRepository.buscarJogoPorId(jogoId);
+        const jogo = await JogoRepository.buscarJogoPorId(jogoId);
 
-    if (!jogo) {
-        throw new Error("JOGO NÃO ENCONTRADO");
+        if (!jogo) {
+            throw new Error("JOGO NÃO ENCONTRADO");
+        }
+
+        if (jogo.status_jogo !== "EM_ANDAMENTO") {
+            throw new Error("JOGO ENCERRADO");
+        }
+
+        const usuario = await UsuarioRepository.buscarUsuarioPorId(jogo.usuario_id);
+
+        if (!usuario) {
+            throw new Error("USUÁRIO NÃO ENCONTRADO");
+        }
+
+        const novoSaldo = Number(usuario.saldo) + Number(jogo.premio_atual);
+
+        await UsuarioRepository.atualizarSaldo(usuario.id, novoSaldo);
+
+        await JogoRepository.finalizarJogo(jogo.id);
+
+        return {
+            premio: jogo.premio_atual,
+            saldoAtual: novoSaldo,
+            status: "FINALIZADO"
+        };
     }
-
-    if (jogo.status_jogo !== "EM_ANDAMENTO") {
-        throw new Error("JOGO ENCERRADO");
-    }
-
-    const usuario = await UsuarioRepository.buscarUsuarioPorId(jogo.usuario_id);
-
-    if (!usuario) {
-        throw new Error("USUÁRIO NÃO ENCONTRADO");
-    }
-
-    const novoSaldo = Number(usuario.saldo) + Number(jogo.premio_atual);
-
-    await UsuarioRepository.atualizarSaldo(usuario.id,novoSaldo);
-
-    await JogoRepository.finalizarJogo(jogo.id);
-
-    return {
-        premio: jogo.premio_atual,
-        saldoAtual: novoSaldo,
-        status: "FINALIZADO"
-    };
-}
 
     async comecarJogo(userId, valorAposta) {
+        const usuario = await UsuarioRepository.buscarUsuarioPorId(userId);
 
+        if (!usuario) {
+            throw new Error("USUÁRIO NÃO ENCONTRADO");
+        }
 
         if (valorAposta <= 0) {
             throw new Error("VALOR DE APOSTA INVÁLIDO");
         }
+        
+        if (Number(usuario.saldo) < Number(valorAposta)) {
+            throw new Error("SALDO INSUFICIENTE");
+        }
 
+        const novoSaldo =
+            Number(usuario.saldo) - Number(valorAposta);
+
+        await UsuarioRepository.atualizarSaldo(
+            usuario.id,
+            novoSaldo
+        );
         const jogoExistente = await JogoRepository.buscarJogoEmAndamento(userId);
 
         if (jogoExistente) {
