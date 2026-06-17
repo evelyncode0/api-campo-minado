@@ -1,3 +1,4 @@
+// Feito por Guilherme H.
 const JogoService = require("../services/JogoService.js");
 
 class JogoController {

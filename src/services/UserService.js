@@ -1,18 +1,26 @@
+const userRepository = require('../repositories/UserRepository');
+
 const getUser = async (id) => {
 
     if (!id) {
         throw new Error("ID é obrigatório");
     }
 
-    // depois vai vir do banco
+    const usuario = await userRepository.getUser(id);
+
+    // puxa do banco
     return {
-        id,
-        mensagem: "Buscar usuário no banco "
+        id: usuario.id,
+        nome: usuario.nome,
+        email: usuario.email,
+        saldo: usuario.saldo
+       
     };
 };
 
 
 const atualizarSaldo = async (id, saldo) => {
+    const usuario = await userRepository.atualizarSaldo(id, saldo);
 
     if (!id) {
         throw new Error("ID é obrigatório");
@@ -29,17 +37,24 @@ const atualizarSaldo = async (id, saldo) => {
     return {
         mensagem: "Atualizar saldo no banco "
     };
+
+    return {
+        id: usuario.id,
+        saldo: usuario.saldo
+    }
 };
 
 
 const remover = async (id) => {
 
+    const usuario = await userRepository.deletarUsuario(id);
+    
     if (!id) {
         throw new Error("ID é obrigatório");
     }
 
     return {
-        mensagem: "Deletar usuário no banco "
+        id: usuario.id
     };
 };
 

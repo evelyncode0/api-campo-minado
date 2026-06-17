@@ -17,6 +17,7 @@ class UserController {
         }
     }
 
+
     async dashboard(req, res) {
         try {
             const { id } = req.params;

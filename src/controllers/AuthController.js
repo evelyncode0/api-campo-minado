@@ -28,7 +28,27 @@ const login = async (req, res) => {
     }
 };
 
+// RESET PASSWORD
+const resetPassword = async (req, res) => {
+
+    try {
+
+        const resultado = await authService.resetPassword(req.body);
+
+        return res.status(200).json(resultado);
+
+
+    } catch (error) {
+
+        return res.status(400).json({
+            mensagem: error.message
+        });
+
+    }
+};
+
 module.exports = {
     registro,
-    login
+    login,
+    resetPassword
 };
