@@ -1,6 +1,6 @@
 // Feito por Guilherme H.
 const JogoRepository = require("../repositories/JogoRepository");
-const UserRepository = require("../repositories/UserRepository");
+const UsuarioRepository = require("../repositories/UserRepository");
 class JogoService {
 
     gerarTabuleiro() {
@@ -131,6 +131,7 @@ class JogoService {
 }
 
     async comecarJogo(userId, valorAposta) {
+
 
         if (valorAposta <= 0) {
             throw new Error("VALOR DE APOSTA INVÁLIDO");

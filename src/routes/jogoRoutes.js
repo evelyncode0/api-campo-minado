@@ -4,8 +4,8 @@ const JogoController = require("../controllers/JogoController.js");
 
 const router = Router();
 
-router.post("/start", JogoController.comecarJogo);
-router.post("/:gameId/reveal", JogoController.revelarPosicao);
-router.post("/:gameId/cashout", JogoController.sacar);
+router.post("games/start", JogoController.comecarJogo);
+router.post("games/:gameId/reveal", JogoController.revelarPosicao);
+router.post("games/:gameId/cashout", JogoController.sacar);
 
 module.exports = router;
