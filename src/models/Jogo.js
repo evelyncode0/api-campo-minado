@@ -1,3 +1,4 @@
+//Feito por Evelyn G
 const Usuario = require("./Usuario");
 const { fromRow } = require("./Usuario");
 

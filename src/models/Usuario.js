@@ -1,3 +1,4 @@
+//Feito por Evelyn G
 class Usuario {
     constructor(id, nome, email, data_nasc, senha, confirmar_senha, saldo) {
         this.id = id;

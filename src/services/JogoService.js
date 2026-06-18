@@ -91,7 +91,6 @@ class JogoService {
             resultado: "DIAMANTE",
             diamantes_encontrados: jogo.diamantes_encontrados,
             premio_atual: jogo.premio_atual,
-            status: jogo.status_jogo
         };
     }
 
@@ -104,6 +103,10 @@ class JogoService {
         const jogo = await JogoRepository.buscarJogoPorId(jogoId);
 
         if (!jogo) {
+            throw new Error("JOGO NÃO ENCONTRADO")
+        }
+
+        if (jogo.status_jogo === "FINALIZADO") {
             throw new Error("JOGO NÃO ENCONTRADO");
         }
 
@@ -131,34 +134,38 @@ class JogoService {
     }
 
     async comecarJogo(userId, valorAposta) {
-        const usuario = await UsuarioRepository.buscarUsuarioPorId(userId);
 
-        if (!usuario) {
-            throw new Error("USUÁRIO NÃO ENCONTRADO");
+        const jogoExistente = await JogoRepository.buscarJogoEmAndamento(userId);
+        
+         if (jogoExistente) {
+            throw new Error("JÁ EXISTE UM JOGO EM ANDAMENTO");
+        }
+
+        const usuarioExistente = await UsuarioRepository.buscarUsuarioPorId(userId);
+
+        if (!usuarioExistente) {
+            throw new Error("USUÁRIO NÃO EXISTE");
+        }
+
+        const saldoUser = await UsuarioRepository.getSaldo(userId);
+
+        if (saldoUser.saldo < valorAposta) {
+            throw new Error("SALDO MENOR QUE O VALOR DA APOSTA");
         }
 
         if (valorAposta <= 0) {
             throw new Error("VALOR DE APOSTA INVÁLIDO");
         }
-        
-        if (Number(usuario.saldo) < Number(valorAposta)) {
-            throw new Error("SALDO INSUFICIENTE");
-        }
 
-        const novoSaldo =
-            Number(usuario.saldo) - Number(valorAposta);
+        const novoSaldo = usuarioExistente.saldo - valorAposta;
 
-        await UsuarioRepository.atualizarSaldo(
-            usuario.id,
-            novoSaldo
-        );
-        const jogoExistente = await JogoRepository.buscarJogoEmAndamento(userId);
-
-        if (jogoExistente) {
-            throw new Error("JÁ EXISTE UM JOGO EM ANDAMENTO");
-        }
+        await UsuarioRepository.atualizarSaldo(userId, novoSaldo);
 
         const tabuleiro = this.gerarTabuleiro();
+
+        //PRINTS PARA TESTES 
+        console.log("ID do usuario:", userId)
+        console.log(tabuleiro); 
 
         const jogo = {
             usuario_id: userId,
@@ -170,8 +177,15 @@ class JogoService {
             posicoes_reveladas: []
         };
 
-        return await JogoRepository.criarJogo(jogo);
+
+        const jogoCriado =
+            await JogoRepository.criarJogo(jogo);
+
+        return {
+            gameId: jogoCriado.id
+        };
     }
 }
+
 
 module.exports = new JogoService();

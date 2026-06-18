@@ -1,3 +1,5 @@
+//Feito por Evelyn G
+
 const pool = require('../config/pg');
 
 const criarJogo = async (jogo) => {
@@ -14,14 +16,14 @@ const criarJogo = async (jogo) => {
     RETURNING *;`
 
     const values = [
-        jogo.usuario_id,
-        jogo.valor_aposta,
-        jogo.premio_atual,
-        jogo.diamantes_encontrados,
-        jogo.status_jogo,
-        jogo.tabuleiro,
-        jogo.posicoes_reveladas
-    ];
+    jogo.usuario_id,
+    jogo.valor_aposta,
+    jogo.premio_atual,
+    jogo.diamantes_encontrados,
+    jogo.status_jogo,
+    JSON.stringify(jogo.tabuleiro),
+    JSON.stringify(jogo.posicoes_reveladas)
+];
 
     const result = await pool.query(query, values);
     return result.rows[0];
@@ -65,7 +67,7 @@ const atualizarJogo = async (id, dados) => {
     [
         dados.premio_atual,
         dados.diamantes_encontrados,
-        dados.posicoes_reveladas,
+        JSON.stringify(dados.posicoes_reveladas),
         dados.status_jogo,
         id
     ]

@@ -103,6 +103,15 @@ const atualizarSenha = async (id, novaSenha) => {
     return result.rows[0];
 };
 
+const getSaldo = async (id) =>{
+    const result = await pool.query (
+        "SELECT id, saldo FROM Usuario WHERE id = $1",
+    [id]
+    );
+
+    return result.rows[0];
+};
+
 
 module.exports = {
     criarUsuario,
@@ -112,5 +121,6 @@ module.exports = {
     atualizarSaldo,
     buscarDashboard,
     atualizarSenha,
-    getUser
+    getUser,
+    getSaldo
 };

@@ -22,11 +22,11 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const jogoRoutes = require('./routes/jogoRoutes');
 
-console.log(authRoutes);
-console.log(userRoutes);
-console.log(jogoRoutes);
+// console.log(authRoutes);
+// console.log(userRoutes);
+// console.log(jogoRoutes);
 
-// Conectando rotas AUTH JOGO E USER
+// Conectando rotas AUTH, JOGO E USER
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/games", jogoRoutes);
@@ -59,7 +59,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-// TESTE DE CON
+// TESTE DE CONEXÃO
 db.query('SELECT NOW()')
     .then(result => {
         console.log('Banco conectado!');

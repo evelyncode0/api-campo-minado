@@ -35,7 +35,7 @@ const atualizarSaldo = async (id, saldo) => {
     }
 
     return {
-        mensagem: "Atualizar saldo no banco "
+        mensagem: `Saldo do usuario ${id} atualizado!`
     };
 
     return {
