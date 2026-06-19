@@ -5,7 +5,7 @@ class JogoService {
 
     gerarTabuleiro() {
         const tabuleiro = [];
-        const qtdDiamantes = Math.floor(Math.random() * 10) + 1;
+        const qtdDiamantes = Math.floor(Math.random() * 26);
 
         for (let i = 0; i < 5; i++) {
             tabuleiro[i] = [];
