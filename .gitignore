@@ -1,7 +1,4 @@
 #Ignorar arquivos de configuração sensíveis e dependências
 
-#config
-/.env
-
 #dependências do Node.js
 /node_modules
