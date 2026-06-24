@@ -23,13 +23,15 @@ Acesse a pasta do projeto:
 cd api-campo-minado
 
 Crie um arquivo .env na raiz do projeto e cole esse código:
-# Database Configuration
+
+Database Configuration
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=campominado_db
 DB_USER=postgres
 DB_PASSWORD=postgres
-# Server Configuration
+
+Server Configuration
 PORT=3000
 NODE_ENV=development
 
