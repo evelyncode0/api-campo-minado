@@ -20,8 +20,7 @@ const getUser = async (id) => {
 
 
 const atualizarSaldo = async (id, saldo) => {
-    const usuario = await userRepository.atualizarSaldo(id, saldo);
-
+    
     if (!id) {
         throw new Error("ID é obrigatório");
     }
@@ -33,6 +32,9 @@ const atualizarSaldo = async (id, saldo) => {
     if (saldo < 0) {
         throw new Error("Saldo não pode ser negativo");
     }
+
+    const usuario = await userRepository.atualizarSaldo(id, saldo);
+
 
     return {
         mensagem: `Saldo do usuario ${id} atualizado!`
@@ -46,12 +48,12 @@ const atualizarSaldo = async (id, saldo) => {
 
 
 const remover = async (id) => {
-
-    const usuario = await userRepository.deletarUsuario(id);
     
     if (!id) {
         throw new Error("ID é obrigatório");
     }
+
+     const usuario = await userRepository.deletarUsuario(id);
 
     return {
         id: usuario.id
@@ -60,13 +62,19 @@ const remover = async (id) => {
 
 
 const dashboard = async (id) => {
-
+    
     if (!id) {
         throw new Error("ID é obrigatório");
     }
 
+    const dados = await userRepository.buscarDashboard(id);
+
     return {
-        mensagem: "Buscar dashboard no banco"
+        totalJogos: Number(dados.total_jogos),
+        vitorias: Number(dados.vitorias),
+        derrotas: Number(dados.derrotas),
+        valorGanho: Number(dados.valor_ganho),
+        valorPerdido: Number(dados.valor_perdido)
     };
 };
 

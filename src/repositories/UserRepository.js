@@ -74,18 +74,62 @@ const atualizarSaldo = async (id, saldo) => {
 
 const buscarDashboard = async (id) => {
 
-    const result = await pool.query(
+    const totalJogos = await pool.query(
         `
-        SELECT
-            COUNT(*) AS totaljogos
+        SELECT COUNT(*) AS total_jogos
         FROM Jogo
         WHERE usuario_id = $1
         `,
         [id]
     );
 
+    const vitorias = await pool.query(
+        `
+        SELECT COUNT(*) AS vitorias
+        FROM Jogo
+        WHERE usuario_id = $1
+        AND status_jogo = 'FINALIZADO'
+        `,
+        [id]
+    );
 
-    return result.rows[0];
+    const derrotas = await pool.query(
+        `
+        SELECT COUNT(*) AS derrotas
+        FROM Jogo
+        WHERE usuario_id = $1
+        AND status_jogo = 'PERDEU'
+        `,
+        [id]
+    );
+
+    const valorGanho = await pool.query(
+        `
+        SELECT COALESCE(SUM(premio_atual), 0) AS valor_ganho
+        FROM Jogo
+        WHERE usuario_id = $1
+        AND status_jogo = 'FINALIZADO'
+        `,
+        [id]
+    );
+
+    const valorPerdido = await pool.query(
+        `
+        SELECT COALESCE(SUM(valor_aposta), 0) AS valor_perdido
+        FROM Jogo
+        WHERE usuario_id = $1
+        AND status_jogo = 'PERDEU'
+        `,
+        [id]
+    );
+
+    return {
+        total_jogos: totalJogos.rows[0].total_jogos,
+        vitorias: vitorias.rows[0].vitorias,
+        derrotas: derrotas.rows[0].derrotas,
+        valor_ganho: valorGanho.rows[0].valor_ganho,
+        valor_perdido: valorPerdido.rows[0].valor_perdido
+    };
 };
 
 const atualizarSenha = async (id, novaSenha) => {
